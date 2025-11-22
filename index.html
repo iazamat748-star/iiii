@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тәтті Шәй | Гүлнәр</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-light: #faeeb6;
+            --text-main: #2c3e50;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdfbf7;
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- 1. АЛТЫН ТОЗАҢДАР (Фон) --- */
+        .dust-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .dust {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: floatDust linear infinite;
+        }
+        @keyframes floatDust {
+            from { transform: translateY(100vh); opacity: 0; }
+            50% { opacity: 1; }
+            to { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        /* --- 2. КОНВЕРТ (Интро) --- */
+        #envelope-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #fffaf0 0%, #e6dcca 100%);
+            z-index: 9999;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
+        }
+        
+        .envelope {
+            width: 300px; height: 200px;
+            background: #f4e4bc;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            transition: transform 0.3s;
+        }
+        .envelope:hover { transform: scale(1.05); }
+        
+        .envelope::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #e3d0a3;
+            transform-origin: top;
+            transition: transform 0.6s;
+            z-index: 5;
+        }
+        .envelope.open::before { transform: rotateX(180deg); z-index: 1; }
+        
+        .wax-seal {
+            width: 60px; height: 60px;
+            background: radial-gradient(circle, #d4af37, #b8860b);
+            border-radius: 50%;
+            z-index: 6;
+            display: flex; justify-content: center; align-items: center;
+            color: #fff; font-size: 1.5rem; font-family: 'Great Vibes';
+            border: 2px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        /* --- 3. НЕГІЗГІ КАРТА --- */
+        .main-card {
+            max-width: 600px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #fff;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.2);
+            padding: 50px 25px;
+            text-align: center;
+            position: relative;
+            border-radius: 10px;
+            display: none; 
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s;
+            z-index: 1;
+            padding-bottom: 80px; /* Музыка панеліне орын */
+        }
+        .main-card.show { display: block; opacity: 1; transform: translateY(0); }
+
+        .ornament-border {
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 2px double var(--gold);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: var(--gold);
+            margin: 10px 0;
+            line-height: 1.1;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .poem-box {
+            font-style: italic;
+            color: #555;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* --- 4. ФУНКЦИЯЛАР БЛОГЫ --- */
+        .timer-box {
+            display: flex; justify-content: center; gap: 15px; margin: 30px 0;
+        }
+        .t-circle {
+            width: 60px; height: 60px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            background: #fff;
+        }
+        .t-val { font-weight: bold; font-size: 1.2rem; color: #333; }
+        .t-label { font-size: 0.7rem; text-transform: uppercase; color: #888; }
+
+        .timeline {
+            text-align: left; margin: 30px 10px;
+            border-left: 3px solid var(--gold);
+            padding-left: 20px;
+        }
+        .tl-item { margin-bottom: 20px; position: relative; }
+        .tl-item::before {
+            content: ''; position: absolute; left: -29px; top: 5px;
+            width: 15px; height: 15px; background: var(--gold);
+            border-radius: 50%; border: 3px solid #fff;
+        }
+        .tl-time { font-weight: bold; color: var(--gold); }
+        .tl-desc { font-size: 1.1rem; }
+
+        .grid-info {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;
+        }
+        .info-card {
+            background: #fcfcfc; border: 1px solid #eee; padding: 15px;
+            border-radius: 10px; box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+        }
+        .ic-icon { font-size: 1.5rem; color: var(--gold); margin-bottom: 5px; }
+        .ic-title { font-size: 0.8rem; text-transform: uppercase; color: #999; }
+        .ic-val { font-weight: bold; }
+
+        .address-box {
+            background: #fffaf0; padding: 20px; border-radius: 10px;
+            border: 1px dashed var(--gold); margin-bottom: 30px;
+        }
+        .copy-btn {
+            margin-top: 10px;
+            background: #fff; border: 1px solid var(--gold);
+            padding: 8px 20px; border-radius: 20px;
+            cursor: pointer; font-size: 0.9rem; color: #333;
+            display: inline-flex; align-items: center; gap: 5px;
+            transition: background 0.3s;
+        }
+        .copy-btn:hover { background: var(--gold); color: #fff; }
+
+        .name-input {
+            width: 80%; padding: 12px;
+            border: none; border-bottom: 2px solid var(--gold);
+            font-family: 'Cormorant Garamond'; font-size: 1.3rem;
+            text-align: center; outline: none; background: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            width: 100%; padding: 15px; border-radius: 50px;
+            text-decoration: none; font-weight: bold; font-size: 1.1rem;
+            margin-bottom: 10px; transition: transform 0.2s; box-sizing: border-box;
+        }
+        .btn:active { transform: scale(0.98); }
+        
+        .btn-wa { background: #25D366; color: white; box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
+        .btn-map { background: #4a90e2; color: white; }
+        .btn-cal { background: #f39c12; color: white; }
+
+        /* --- 5. ЖАҢАРТЫЛҒАН МУЗЫКА ТҮЙМЕСІ --- */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #d4af37;
+            border-radius: 50px;
+            padding: 8px 20px 8px 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: none; /* Конверт ашылғанда шығады */
+        }
+
+        .music-player:hover { transform: scale(1.05); }
+
+        .player-icon {
+            width: 40px; height: 40px;
+            background: #d4af37;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            color: white; font-size: 1.2rem;
+        }
+
+        /* Ойнап тұрғанда */
+        .music-player.playing .player-icon {
+            animation: spin 3s linear infinite;
+            background: #25D366;
+        }
+
+        .player-text {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+            font-family: sans-serif;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
+
+        @media (max-width: 400px) {
+            h1 { font-size: 3.5rem; }
+            .t-circle { width: 50px; height: 50px; }
+            .grid-info { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dust-container" id="dust"></div>
+
+    <div id="envelope-screen">
+        <div class="envelope" id="envelope" onclick="openInvitation()">
+            <div class="wax-seal">Г</div>
+        </div>
+        <div style="margin-top: 40px; color: #888; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; animation: pulse 2s infinite;">
+            Ашу үшін басыңыз
+        </div>
+    </div>
+
+    <div class="main-card" id="card">
+        <div class="ornament-border"></div>
+
+        <div style="color: var(--gold); letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 10px;">Арнайы Шақыру</div>
+        <h1 data-aos="zoom-in">Тәтті Шәй</h1>
+        
+        <div class="poem-box" data-aos="fade-up">
+            "Сағынамын, аңсаймын сіздерді мен,<br>
+            Рахат табам бірге жүрген күндерімнен.<br>
+            Ренішсіз өтсін екен сол күннің бірі маған,<br>
+            Шақырамын қуаныш көру үшін жүздеріңнен."
+        </div>
+
+        <div class="timer-box" data-aos="fade-up">
+            <div class="t-circle"><span id="d" class="t-val">0</span><span class="t-label">Күн</span></div>
+            <div class="t-circle"><span id="h" class="t-val">0</span><span class="t-label">Сағ</span></div>
+            <div class="t-circle"><span id="m" class="t-val">0</span><span class="t-label">Мин</span></div>
+            <div class="t-circle"><span id="s" class="t-val">0</span><span class="t-label">Сек</span></div>
+        </div>
+
+        <h3 style="color: var(--gold); margin-top: 30px; font-family:'Great Vibes'; font-size: 2rem;">Күн Тәртібі</h3>
+        <div class="timeline" data-aos="fade-right">
+            <div class="tl-item">
+                <div class="tl-time">12:00</div>
+                <div class="tl-desc">Қонақтардың жиналуы</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-time">13:00</div>
+                <div class="tl-desc">Тәтті шәй және әңгіме</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-time">15:00</div>
+                <div class="tl-desc">Ойындар мен би</div>
+            </div>
+        </div>
+
+        <div class="grid-info" data-aos="fade-up">
+            <div class="info-card">
+                <div class="ic-icon"><i class="fas fa-snowflake"></i></div>
+                <div class="ic-title">Ауа-райы</div>
+                <div class="ic-val">-5°C, Қар</div>
+            </div>
+            <div class="info-card">
+                <div class="ic-icon"><i class="fas fa-tshirt"></i></div>
+                <div class="ic-title">Dress Code</div>
+                <div class="ic-val">Еркін стиль</div>
+            </div>
+        </div>
+
+        <div class="address-box" data-aos="zoom-in">
+            <div style="font-size: 1.8rem; font-weight: bold; color: #333; margin-bottom: 5px; font-family:'Great Vibes';">6 Желтоқсан</div>
+            <div style="color: #888; font-size: 0.9rem; margin-bottom: 15px;">(Амандық болса 27.12)</div>
+            
+            <i class="fas fa-map-marker-alt" style="color: var(--gold); font-size: 1.5rem;"></i>
+            <div style="margin: 10px 0; font-size: 1.1rem;">
+                Қосшы ауылы, "Малахит" сарайы<br>1-линия, 25-үй
+            </div>
+
+            <button class="copy-btn" onclick="copyAddress()">
+                <i class="far fa-copy"></i> Адресті көшіру
+            </button>
+        </div>
+
+        <div style="margin-top: 30px;" data-aos="fade-up">
+            <input type="text" id="guestName" class="name-input" placeholder="Есіміңізді жазыңыз...">
+            
+            <a href="#" onclick="sendWhatsapp()" class="btn btn-wa">
+                <i class="fab fa-whatsapp"></i> Келемін (Растау)
+            </a>
+            
+            <div style="display: flex; gap: 10px;">
+                <a href="https://go.2gis.com/kosshy" target="_blank" class="btn btn-map">
+                    <i class="fas fa-location-arrow"></i> Карта
+                </a>
+                <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Гүлнәрдің+Тәтті+Шәйі&dates=20251206T120000/20251206T180000" target="_blank" class="btn btn-cal">
+                    <i class="far fa-calendar-plus"></i> Күнтізбе
+                </a>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; font-family: 'Great Vibes'; font-size: 2.5rem; color: var(--gold);">
+            Шәй иесі: Гүлнәр
+        </div>
+    </div>
+
+    <div class="music-player" id="musicControl" onclick="toggleMusic()">
+        <div class="player-icon">
+            <i class="fas fa-music" id="m-icon"></i>
+        </div>
+        <div class="player-text" id="m-text">Ойнату</div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // 1. ФОН ЖАСАУ
+        const dustContainer = document.getElementById('dust');
+        for(let i=0; i<30; i++){
+            let d = document.createElement('div');
+            d.className = 'dust';
+            d.style.left = Math.random() * 100 + '%';
+            d.style.animationDuration = (Math.random() * 10 + 5) + 's';
+            d.style.animationDelay = (Math.random() * 5) + 's';
+            dustContainer.appendChild(d);
+        }
+
+        // 2. АШУ ФУНКЦИЯСЫ
+        function openInvitation() {
+            const env = document.getElementById('envelope');
+            const screen = document.getElementById('envelope-screen');
+            const card = document.getElementById('card');
+            const music = document.getElementById('bgMusic');
+            const player = document.getElementById('musicControl');
+            const mText = document.getElementById('m-text');
+
+            env.classList.add('open');
+
+            setTimeout(() => {
+                confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, colors: ['#d4af37', '#ffffff'] });
+            }, 300);
+
+            setTimeout(() => {
+                screen.style.opacity = 0;
+                setTimeout(()=> screen.style.display='none', 800);
+                
+                card.classList.add('show');
+                player.style.display = 'flex'; 
+                
+                // Музыканы қосу
+                music.play().then(() => {
+                    player.classList.add('playing');
+                    mText.innerText = "Тоқтату";
+                    document.getElementById('m-icon').className = "fas fa-pause";
+                }).catch(e => {
+                    console.log("Autoplay prevented");
+                    mText.innerText = "Ойнату";
+                });
+                
+            }, 1000);
+        }
+
+        // 3. МУЗЫКА БАСҚАРУ (ЖАҢАРТЫЛҒАН)
+        function toggleMusic() {
+            const m = document.getElementById('bgMusic');
+            const player = document.getElementById('musicControl');
+            const icon = document.getElementById('m-icon');
+            const text = document.getElementById('m-text');
+
+            if(m.paused) {
+                m.play(); 
+                player.classList.add('playing');
+                icon.className = "fas fa-pause";
+                text.innerText = "Тоқтату";
+            } else {
+                m.pause(); 
+                player.classList.remove('playing');
+                icon.className = "fas fa-play";
+                text.innerText = "Ойнату";
+            }
+        }
+
+        // 4. ТАЙМЕР
+        const dest = new Date("Dec 6, 2025 12:00:00").getTime();
+        setInterval(() => {
+            let diff = dest - new Date().getTime();
+            if(diff < 0) return;
+            document.getElementById("d").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("h").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("m").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("s").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }, 1000);
+
+        // 5. АДРЕС КӨШІРУ
+        function copyAddress() {
+            const text = "Қосшы ауылы, Малахит сарайы, 1-линия, 25-үй";
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Адрес көшірілді! Таксиге қоюға дайын.");
+            });
+        }
+
+        // 6. WHATSAPP
+        function sendWhatsapp() {
+            let name = document.getElementById('guestName').value || "Қонақ";
+            let url = `https://wa.me/77764749950?text=${encodeURIComponent("Сәлем Гүлнәр! Мен " + name + ", Тәтті шәйға барамын!")}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
